@@ -56,7 +56,8 @@ class MoveisView(Resource):
     def get(self):
         if 'director_id' in request.args:
             id = request.args.get('director_id')
-            all_movies = id.filter(Movie.director_id == id)
+            #all_movies = id.filter(Movie.director_id == id)
+            all_movies = Movie.query.filter(Movie.director_id == id)
             return movie_schema.dump(all_movies)
 
 
