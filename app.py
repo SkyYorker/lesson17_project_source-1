@@ -47,19 +47,19 @@ class MoveisView(Resource):
 
     def get(self):
         all_movies = Movie.query.all()
-        if 'director_id' in request.args:
-            id = request.args.get('director_id')
-            all_movies = Movie.query.filter(Movie.director_id == id)
-            return movies_schema.dump(all_movies)
-
-            # Смотреть тут ↓↓↓
-        
-        elif 'director_id' in request.args and 'genre_id' in request.args: # как это сделать ??
-            did = request.args.get('director_id')
-            gid = request.args.get('genre_id')
+        did = request.args.get('director_id')
+        gid = request.args.get('genre_id')
+        if len(request.args) == 2: # rfr
             all_movies = Movie.query.filter(Movie.director_id == did, Movie.genre_id == gid) 
             return movies_schema.dump(all_movies)
-
+        if 'director_id' in request.args:
+            all_movies = Movie.query.filter(Movie.director_id == did)
+            return movies_schema.dump(all_movies)
+        if 'genre_id' in request.args:
+            all_movies = Movie.query.filter(Movie.genre_id == gid)
+            return movies_schema.dump(all_movies)
+        
+ 
 
 
 
