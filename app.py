@@ -46,19 +46,21 @@ genre_ns = api.namespace('genres')
 class MoveisView(Resource):
 
     def get(self):
-       all_movies = Movie.query.all()
-       return movies_schema.dump(all_movies), 200
-
-
-@movies_ns.route('/')
-class MoveisView(Resource):
-
-    def get(self):
+        all_movies = Movie.query.all()
         if 'director_id' in request.args:
             id = request.args.get('director_id')
-            #all_movies = id.filter(Movie.director_id == id)
             all_movies = Movie.query.filter(Movie.director_id == id)
-            return movie_schema.dump(all_movies)
+            return movies_schema.dump(all_movies)
+
+            # Смотреть тут ↓↓↓
+        
+        elif 'director_id' in request.args and 'genre_id' in request.args: # как это сделать ??
+            did = request.args.get('director_id')
+            gid = request.args.get('genre_id')
+            all_movies = Movie.query.filter(Movie.director_id == did, Movie.genre_id == gid) 
+            return movies_schema.dump(all_movies)
+
+
 
 
 @movies_ns.route('/<int:uid>')
@@ -101,7 +103,16 @@ class DirectorsView(Resource):
 @genre_ns.route('/')
 class GenresView(Resource):
 
-    def post():
+    def get(self):
+        if 'genre_id' in request.args:
+            id = request.args.get('genre_id')
+            #all_movies = id.filter(Movie.director_id == id)
+            all_genres = Movie.query.filter(Movie.genre_id == id)
+        return movies_schema.dump(all_genres)
+        
+        
+
+    def post(self):
         req_json = request.json
         new_genre = Genre(**req_json)
         with db.session.begin():
