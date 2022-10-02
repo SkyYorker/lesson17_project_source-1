@@ -61,8 +61,6 @@ class MoveisView(Resource):
         
  
 
-
-
 @movies_ns.route('/<int:uid>')
 class MoveieView(Resource):
 
@@ -102,15 +100,6 @@ class DirectorsView(Resource):
 
 @genre_ns.route('/')
 class GenresView(Resource):
-
-    def get(self):
-        if 'genre_id' in request.args:
-            id = request.args.get('genre_id')
-            #all_movies = id.filter(Movie.director_id == id)
-            all_genres = Movie.query.filter(Movie.genre_id == id)
-        return movies_schema.dump(all_genres)
-        
-        
 
     def post(self):
         req_json = request.json
